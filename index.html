@@ -815,16 +815,23 @@ function saveGithubToken() {
 }
 
 async function afterSetup() {
-  document.getElementById('loading-section').style.display = 'block';
-  document.getElementById('loading-text').textContent = 'Henter seneste madplan...';
-  const plan = await loadPlanFromGitHub();
-  document.getElementById('loading-section').style.display = 'none';
-  if (plan) {
-    localStorage.setItem('wp_madplan', JSON.stringify(plan));
-    showPlan(plan);
-  } else {
-    const local = localStorage.getItem('wp_madplan');
-    if (local) { try { showPlan(JSON.parse(local)); return; } catch(e) {} }
+  try {
+    document.getElementById('loading-section').style.display = 'block';
+    document.getElementById('loading-text').textContent = 'Henter seneste madplan...';
+    const plan = await loadPlanFromGitHub();
+    document.getElementById('loading-section').style.display = 'none';
+    if (plan) {
+      localStorage.setItem('wp_madplan', JSON.stringify(plan));
+      await showPlan(plan);
+    } else {
+      const local = localStorage.getItem('wp_madplan');
+      if (local) {
+        try { await showPlan(JSON.parse(local)); return; } catch(e) {}
+      }
+      showForm();
+    }
+  } catch(e) {
+    document.getElementById('loading-section').style.display = 'none';
     showForm();
   }
 }
@@ -838,11 +845,9 @@ function resetApiKey() {
 
 // --- Init ---
 (function init() {
-  try {
-    if (!getApiKey()) { showApiKeySetup(); return; }
-    if (!getGhToken()) { showGithubSetup(); return; }
-    afterSetup();
-  } catch(e) { showForm(); }
+  if (!getApiKey()) { showApiKeySetup(); return; }
+  if (!getGhToken()) { showGithubSetup(); return; }
+  afterSetup().catch(() => showForm());
 })();
 </script>
 </body>
