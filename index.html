@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="WP Madplan">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCI+CiAgPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSIzOCIgZmlsbD0iIzBmNmU1NiIvPgogIDxjaXJjbGUgY3g9IjkwIiBjeT0iODgiIHI9IjQ2IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTUpIi8+CiAgPGNpcmNsZSBjeD0iOTAiIGN5PSI4OCIgcj0iNDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPgogIDxjaXJjbGUgY3g9IjkwIiBjeT0iODgiIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4zNSkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGxpbmUgeDE9IjYyIiB5MT0iNDIiIHgyPSI2MiIgeTI9IjEzNSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8bGluZSB4MT0iNTUiIHkxPSI0MiIgeDI9IjU1IiB5Mj0iNjgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjY5IiB5MT0iNDIiIHgyPSI2OSIgeTI9IjY4IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik01NSA2OCBRNjIgNzUgNjkgNjgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjExOCIgeTE9IjQyIiB4Mj0iMTE4IiB5Mj0iMTM1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0xMTggNDIgUTEzMCA1NSAxMTggNzgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNC41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+">
+<title>WP Madplan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f4f0; --bg3: #eeedea;
+    --text: #1a1a18; --text2: #5f5e5a; --text3: #9c9a92;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --teal: #0f6e56; --teal-bg: #e1f5ee; --teal-text: #085041;
+    --blue: #185fa5; --blue-bg: #e6f1fb; --blue-text: #0c447c;
+    --amber: #854f0b; --amber-bg: #faeeda; --amber-text: #633806;
+    --green: #3b6d11; --green-bg: #eaf3de; --green-text: #27500a;
+    --red: #a32d2d; --red-bg: #fcebeb; --red-text: #791f1f;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1c; --bg2: #2a2a28; --bg3: #333330;
+      --text: #e8e6de; --text2: #a8a69e; --text3: #6e6c66;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+      --teal: #5dcaa5; --teal-bg: #085041; --teal-text: #9fe1cb;
+      --blue: #85b7eb; --blue-bg: #0c447c; --blue-text: #b5d4f4;
+      --amber: #ef9f27; --amber-bg: #633806; --amber-text: #fac775;
+      --green: #97c459; --green-bg: #27500a; --green-text: #c0dd97;
+      --red: #f09595; --red-bg: #791f1f; --red-text: #f7c1c1;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg2); color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 calc(4rem + env(safe-area-inset-bottom));
+    -webkit-text-size-adjust: 100%;
+  }
+  header {
+    background: var(--bg); border-bottom: 0.5px solid var(--border);
+    padding: 1rem 1.25rem 0.75rem;
+    padding-top: calc(1rem + env(safe-area-inset-top));
+    position: sticky; top: 0; z-index: 10;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 { font-size: 17px; font-weight: 500; color: var(--text); }
+  header p { font-size: 13px; color: var(--text3); margin-top: 2px; }
+  .header-left { display: flex; flex-direction: column; }
+  .new-plan-btn {
+    font-size: 13px; color: var(--teal); background: none; border: none;
+    cursor: pointer; padding: 6px 0 6px 12px; font-family: inherit;
+    -webkit-tap-highlight-color: transparent; white-space: nowrap;
+  }
+  .container { max-width: 640px; margin: 0 auto; padding: 1rem; }
+  .card {
+    background: var(--bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem;
+  }
+  .sec-title {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border);
+  }
+  label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 5px; }
+  select, input[type=text], textarea {
+    width: 100%; background: var(--bg2); border: 0.5px solid var(--border2);
+    border-radius: var(--radius-sm); padding: 9px 10px; font-size: 16px;
+    color: var(--text); font-family: inherit; outline: none;
+    appearance: none; -webkit-appearance: none;
+  }
+  select:focus, input:focus, textarea:focus {
+    border-color: var(--blue); box-shadow: 0 0 0 2px rgba(55,138,221,0.15);
+  }
+  textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .field { margin-bottom: 12px; }
+  .btn {
+    width: 100%; padding: 14px; font-size: 16px; font-weight: 500;
+    cursor: pointer; border-radius: var(--radius-sm); border: none;
+    background: var(--teal); color: #fff; font-family: inherit;
+    transition: opacity 0.15s; -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .btn:active { opacity: 0.82; }
+  .btn-ghost {
+    background: var(--bg2); color: var(--text2);
+    border: 0.5px solid var(--border2); margin-top: 8px;
+  }
+  .btn-danger { background: var(--red); color: #fff; margin-top: 8px; }
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 1rem;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; padding-bottom: 2px;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 9px 16px; font-size: 13px; border-radius: 20px;
+    border: 0.5px solid var(--border2); cursor: pointer; color: var(--text2);
+    background: transparent; font-family: inherit; white-space: nowrap;
+    flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+  }
+  .tab.active { background: var(--teal-bg); color: var(--teal-text); border-color: transparent; font-weight: 500; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .day-card { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
+  .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .day-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 500; }
+  .badge-weekend { background: var(--amber-bg); color: var(--amber-text); }
+  .badge-batch { background: var(--green-bg); color: var(--green-text); }
+  .badge-rugbrod { background: var(--blue-bg); color: var(--blue-text); }
+  .badge-hurtig { background: var(--bg3); color: var(--text3); }
+  .meal-name { font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .meal-meta { font-size: 12px; color: var(--text3); line-height: 1.5; }
+  .shop-cat { margin-bottom: 14px; }
+  .shop-cat-title { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .shop-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .shop-item:last-child { border-bottom: none; }
+  .shop-item.checked .item-name { text-decoration: line-through; color: var(--text3); }
+  .shop-item.checked .item-qty { color: var(--text3); }
+  .item-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--border2); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .shop-item.checked .item-check {
+    background: var(--teal); border-color: var(--teal);
+  }
+  .checkmark { display: none; }
+  .shop-item.checked .checkmark {
+    display: block; color: white; font-size: 13px; font-weight: 600; line-height: 1;
+  }
+  .item-info { flex: 1; }
+  .item-name { font-size: 14px; color: var(--text); }
+  .item-qty { font-size: 12px; color: var(--text3); margin-top: 1px; }
+  .item-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .item-store { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; }
+  .store-netto { background: var(--blue-bg); color: var(--blue-text); }
+  .store-rema { background: var(--red-bg); color: var(--red-text); }
+  .store-lidl { background: var(--amber-bg); color: var(--amber-text); }
+  .item-price { font-size: 13px; color: var(--text2); min-width: 40px; text-align: right; }
+  .price-total { font-size: 15px; font-weight: 500; color: var(--text); margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border2); }
+  .uge-header { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+  .uge-divider { font-size: 13px; font-weight: 500; color: var(--text2); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 12px; }
+  .progress-fill { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.3s; }
+  .checked-count { font-size: 12px; color: var(--text3); margin-bottom: 10px; }
+  .recipe-block { background: var(--bg2); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; }
+  .recipe-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .recipe-day { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+  .recipe-protein { display: inline-block; font-size: 12px; background: var(--green-bg); color: var(--green-text); padding: 2px 9px; border-radius: 20px; margin-bottom: 8px; }
+  .recipe-ing { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+  .recipe-desc { font-size: 13px; color: var(--text); line-height: 1.65; }
+  .info-box { background: var(--blue-bg); color: var(--blue-text); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; margin-bottom: 12px; line-height: 1.5; }
+  .plan-meta { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
+  .loading { text-align: center; padding: 4rem 1rem; color: var(--text2); font-size: 14px; }
+  .spin { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--teal); border-radius: 50%; animation: sp 0.8s linear infinite; margin: 0 auto 14px; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  .error-box { background: var(--red-bg); color: var(--red-text); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 14px; margin-bottom: 1rem; }
+  .modal-overlay {
+    position: absolute; top: 0; left: 0; right: 0;
+    min-height: 100%; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; padding: 2rem 1rem;
+  }
+  .modal {
+    background: var(--bg); border-radius: var(--radius);
+    padding: 1.5rem; max-width: 320px; width: 100%;
+  }
+  .modal-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+  .modal-text { font-size: 14px; color: var(--text2); margin-bottom: 1.25rem; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; }
+  .modal-actions .btn { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <h1>WP Madplan</h1>
+    <p id="header-sub">2-ugers aftensmadsplan for 4</p>
+  </div>
+  <button class="new-plan-btn" id="new-plan-header-btn" style="display:none" onclick="confirmNewPlan()">Ny plan</button>
+</header>
+
+<div class="container">
+  <div id="apikey-section" style="display:none">
+    <div class="card">
+      <div class="sec-title">Opsætning</div>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Indtast din Anthropic API-nøgle for at komme i gang. Den gemmes på denne enhed og bruges til at generere madplaner.</p>
+      <div class="field">
+        <label>API-nøgle</label>
+        <input type="text" id="apikey-input" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+        <p id="apikey-error" style="font-size:12px;color:var(--red);margin-top:6px;"></p>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6;">Nøglen oprettes på <strong>platform.claude.com</strong> under API keys. Den deles med din kæreste så hun kan taste den ind på sin telefon.</p>
+      <button class="btn" onclick="saveApiKey()">Gem og fortsæt</button>
+    </div>
+  </div>
+
+  <div id="form-section">
+    <div class="card">
+      <div class="sec-title">Denne periode</div>
+      <div class="grid2">
+        <div class="field">
+          <label>Budget (DKK/uge)</label>
+          <select id="budget">
+            <option>600</option><option>800</option>
+            <option selected>1000</option><option>1200</option><option>1500</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Batch-cooking</label>
+          <select id="batch">
+            <option value="nej" selected>Ingen denne periode</option>
+            <option value="søndag_dobbelt">Søndag → rester mandag</option>
+            <option value="selvstændig">Selvstændig batch-dag</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Undgå denne periode</label>
+        <textarea id="previous" placeholder="Retter fra sidst, ingredienser I er trætte af, eller andet der skal undgås..."></textarea>
+      </div>
+      <div class="field">
+        <label>Ugens tilbud (valgfrit)</label>
+        <textarea id="offers" placeholder="F.eks. kyllingefilet 39 kr/kg (Netto), laks 79 kr (Lidl)..."></textarea>
+      </div>
+      <div class="field">
+        <label>Særlige ønsker</label>
+        <textarea id="notes" placeholder="F.eks. pizza fredag, børnene er hos bedsteforældre lørdag..."></textarea>
+      </div>
+      <div class="field">
+        <label>Ekstra varer</label>
+        <textarea id="extras" placeholder="F.eks. 4 mælk, 2 poser pasta, 4 pakker havregryn..."></textarea>
+      </div>
+      <button class="btn" onclick="generatePlan()">Generér 2-ugers madplan</button>
+    </div>
+  </div>
+
+  <div id="loading-section" style="display:none">
+    <div class="loading"><div class="spin"></div><div id="loading-text">Planlægger 2 ugers aftensmad...</div></div>
+  </div>
+
+  <div id="error-section" style="display:none"></div>
+
+  <div id="output-section" style="display:none">
+    <p class="plan-meta" id="plan-meta"></p>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('uge1')">Uge 1</button>
+      <button class="tab" onclick="switchTab('uge2')">Uge 2</button>
+      <button class="tab" onclick="switchTab('indkob1')">Indkøb uge 1</button>
+      <button class="tab" onclick="switchTab('indkob2')">Indkøb uge 2</button>
+      <button class="tab" onclick="switchTab('opskrifter')">Opskrifter</button>
+    </div>
+    <div id="tab-uge1" class="tab-content active"></div>
+    <div id="tab-uge2" class="tab-content"></div>
+    <div id="tab-indkob1" class="tab-content"></div>
+    <div id="tab-indkob2" class="tab-content"></div>
+    <div id="tab-opskrifter" class="tab-content"></div>
+  </div>
+
+  <div id="modal-container" style="position:relative"></div>
+</div>
+
+<script>
+function getApiKey() { return localStorage.getItem('wp_api_key') || ''; }
+
+const FAMILY = {
+  sammensætning: "2 voksne + 2 børn (dreng 8 år, pige 5 år). Rasmus: 38 år, mål 90 kg, aktiv med regelmæssig træning. Kæreste: ~60 kg, aktiv med regelmæssig træning.",
+  protein: "Aftensmad skal levere ca. 30-40g protein pr. voksen (begge spiser varieret proteinholdigt til frokost). Angiv estimeret protein pr. voksen i opskrifterne.",
+  butikker: "ALT handles i Netto som udgangspunkt. Rema 1000 og Lidl inddrages KUN hvis der er angivet konkrete tilbud fra disse butikker — og kun for de specifikke tilbudsvarer.",
+  køkken: "Har ovn, airfryer og gasgrill. Brug dem gerne.",
+  præferencer: "Proteinholdigt, grønt til alle aftensmåltider, sundt og nærende. Minimér madspild — genbrug ingredienser på tværs af ugen.",
+  børn: "Børn er lidt kræsne men vi udfordrer dem. Komponenter gerne ved siden af hinanden frem for alt blandet. Ingen allergier.",
+  favoritter: "Pizza, burger, pita (kebab/skinke/falafel), one-pot pasta (serrano), mexikansk (mexi pandekager m.m.), nudler, lasagne, pølser, kartofler. Disse retter må gerne gå igen hver anden uge.",
+  struktur: "Hverdage (man-fre): hurtige retter max 30-40 min. ÉN hverdag = rugbrødsaften med grønt og lækker usædvanlig topping. Weekend (lør-søn): gerne mere tidskrævende og festlige retter."
+};
+
+const CAT_ORDER = [
+  'Frugt og grønt',
+  'Brød og bageri',
+  'Mejeri og æg',
+  'Kød og fisk',
+  'Pålæg og ost',
+  'Tørvarer',
+  'Dåser og sauce',
+  'Frost',
+  'Krydderier og olier',
+  'Diverse'
+];
+
+function sortCategories(indkob) {
+  return [...indkob].sort((a, b) => {
+    const ai = CAT_ORDER.findIndex(c => a.kategori.toLowerCase().includes(c.toLowerCase()) || c.toLowerCase().includes(a.kategori.toLowerCase()));
+    const bi = CAT_ORDER.findIndex(c => b.kategori.toLowerCase().includes(c.toLowerCase()) || c.toLowerCase().includes(b.kategori.toLowerCase()));
+    const aIdx = ai === -1 ? 99 : ai;
+    const bIdx = bi === -1 ? 99 : bi;
+    return aIdx - bIdx;
+  });
+}
+
+function switchTab(name) {
+  const names = ['uge1','uge2','indkob1','indkob2','opskrifter'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function confirmNewPlan() {
+  const mc = document.getElementById('modal-container');
+  mc.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal">
+        <div class="modal-title">Lav ny madplan?</div>
+        <div class="modal-text">Din nuværende plan slettes og du starter forfra. Er du sikker?</div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">Annuller</button>
+          <button class="btn btn-danger" style="flex:1" onclick="startNewPlan()">Ja, ny plan</button>
+        </div>
+        <button class="btn btn-ghost" style="margin-top:8px;font-size:13px;color:var(--text3)" onclick="resetApiKey()">Skift API-nøgle</button>
+      </div>
+    </div>`;
+}
+
+function closeModal() {
+  document.getElementById('modal-container').innerHTML = '';
+}
+
+function startNewPlan() {
+  closeModal();
+  localStorage.removeItem('wp_madplan');
+  localStorage.removeItem('wp_checked_1');
+  localStorage.removeItem('wp_checked_2');
+  showForm();
+}
+
+function showForm() {
+  document.getElementById('form-section').style.display = 'block';
+  document.getElementById('output-section').style.display = 'none';
+  document.getElementById('error-section').style.display = 'none';
+  document.getElementById('new-plan-header-btn').style.display = 'none';
+  restoreFormState();
+}
+
+function showPlan(plan) {
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('output-section').style.display = 'block';
+  document.getElementById('new-plan-header-btn').style.display = 'block';
+  const d = new Date(plan.genereret);
+  document.getElementById('plan-meta').textContent = `Genereret ${d.toLocaleDateString('da-DK', {day:'numeric',month:'long',year:'numeric'})}`;
+  renderAll(plan);
+}
+
+function saveFormState() {
+  const state = {
+    budget: document.getElementById('budget').value,
+    batch: document.getElementById('batch').value,
+    previous: document.getElementById('previous').value,
+    offers: document.getElementById('offers').value,
+    notes: document.getElementById('notes').value,
+    extras: document.getElementById('extras').value,
+  };
+  localStorage.setItem('wp_form', JSON.stringify(state));
+}
+
+function restoreFormState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('wp_form') || '{}');
+    if (s.budget) document.getElementById('budget').value = s.budget;
+    if (s.batch) document.getElementById('batch').value = s.batch;
+    if (s.previous !== undefined) document.getElementById('previous').value = s.previous;
+    if (s.offers !== undefined) document.getElementById('offers').value = s.offers;
+    if (s.notes !== undefined) document.getElementById('notes').value = s.notes;
+    if (s.extras !== undefined) document.getElementById('extras').value = s.extras;
+  } catch(e) {}
+}
+
+function toggleItem(ugeKey, idx) {
+  const storKey = `wp_checked_${ugeKey}`;
+  let checked = {};
+  try { checked = JSON.parse(localStorage.getItem(storKey) || '{}'); } catch(e) {}
+  checked[idx] = !checked[idx];
+  localStorage.setItem(storKey, JSON.stringify(checked));
+  const item = document.querySelector(`[data-uge="${ugeKey}"][data-idx="${idx}"]`);
+  if (item) item.classList.toggle('checked', checked[idx]);
+  updateProgress(ugeKey);
+}
+
+function updateProgress(ugeKey) {
+  const storKey = `wp_checked_${ugeKey}`;
+  let checked = {};
+  try { checked = JSON.parse(localStorage.getItem(storKey) || '{}'); } catch(e) {}
+  const items = document.querySelectorAll(`[data-uge="${ugeKey}"]`);
+  const total = items.length;
+  const done = Object.values(checked).filter(Boolean).length;
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  const fill = document.getElementById(`progress-fill-${ugeKey}`);
+  const count = document.getElementById(`checked-count-${ugeKey}`);
+  if (fill) fill.style.width = pct + '%';
+  if (count) count.textContent = `${done} af ${total} varer i kurven`;
+}
+
+async function generatePlan() {
+  saveFormState();
+  const budget = document.getElementById('budget').value;
+  const batch = document.getElementById('batch').value;
+  const previous = document.getElementById('previous').value;
+  const offers = document.getElementById('offers').value;
+  const notes = document.getElementById('notes').value;
+  const extras = document.getElementById('extras').value;
+
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('output-section').style.display = 'none';
+  document.getElementById('error-section').style.display = 'none';
+  document.getElementById('loading-section').style.display = 'block';
+
+  const msgs = ['Planlægger 2 ugers aftensmad...','Sikrer variation på tværs af uger...','Beregner protein...','Sammensætter indkøbsliste...','Sorterer efter butiksrute...','Næsten klar...'];
+  let mi = 0;
+  const mt = setInterval(() => { mi=(mi+1)%msgs.length; document.getElementById('loading-text').textContent=msgs[mi]; }, 2200);
+
+  const batchTekst = {
+    'nej': 'Ingen batch-cooking.',
+    'søndag_dobbelt': 'Én søndag er batch-cooking: lav dobbelt portion, næste dag er rester.',
+    'selvstændig': 'Én dag er selvstændig batch-dag med stor portion.'
+  }[batch];
+
+  const prompt = `Du er en dansk madplansassistent for en aktiv dansk familie. Lav en 2-UGERS aftensmadsplan (14 dage: uge 1 og uge 2, mandag til søndag).
+
+FAMILIE:
+${JSON.stringify(FAMILY)}
+
+DENNE PERIODE:
+- Budget pr. uge: ${budget} DKK
+- Batch-cooking: ${batchTekst}
+- Undgå: ${previous || 'ingen begrænsninger'}
+- Tilbud: ${offers || 'ingen — brug sæsonens råvarer og typiske Netto-varer'}
+- Ønsker: ${notes || 'ingen'}
+- Ekstra varer (skal integreres i de rigtige kategorier på indkøbslisten): ${extras || 'ingen'}
+
+REGLER:
+1. Hverdage: hurtige retter max 30-40 min. ÉN hverdag pr. uge = rugbrødsaften (grønt + lækker usædvanlig topping).
+2. Weekend: gerne tidskrævende, brug ovn/airfryer/gasgrill aktivt.
+3. Alle retter: grønt som del af måltidet.
+4. Ingen ret gentages på tværs af de 14 dage.
+5. Minimer madspild: genbrug ingredienser inden for samme uge.
+6. Alt i Netto. Brug kun andre butikker for eksplicitte tilbudsvarer.
+7. Ekstra varer placeres i den rigtige kategori — IKKE i en separat kategori.
+8. Brug PRÆCIS disse kategorier i denne rækkefølge (butiksrute): "Frugt og grønt", "Brød og bageri", "Mejeri og æg", "Kød og fisk", "Pålæg og ost", "Tørvarer", "Dåser og sauce", "Frost", "Krydderier og olier", "Diverse".
+9. Returner KUN valid JSON — ingen markdown.
+
+JSON:
+{"uge1":[{"dag":"Mandag","type":"hurtig","ret":"Navn","beskrivelse":"1 sætning","tid":"25 min","protein_pr_voksen":"35g"}],
+"uge2":[{"dag":"Mandag","type":"hurtig","ret":"Navn","beskrivelse":"1 sætning","tid":"25 min","protein_pr_voksen":"35g"}],
+"indkob_uge1":[{"kategori":"Frugt og grønt","varer":[{"navn":"Gulerødder","maengde":"500g","pris":12,"butik":"Netto"}]}],
+"indkob_uge2":[{"kategori":"Frugt og grønt","varer":[{"navn":"Broccoli","maengde":"1 stk","pris":15,"butik":"Netto"}]}],
+"opskrifter":[{"ret":"Navn","dag":"Mandag uge 1","ingredienser":["700g kylling"],"fremgangsmaade":"3-4 sætninger inkl. tip til børn og redskaber.","protein_note":"Ca. 35g pr. voksen"}],
+"madspild_note":"Kort note om ingrediensgenbrug.",
+"total_pris_uge1":920,"total_pris_uge2":880}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 8000, messages: [{ role: 'user', content: prompt }] })
+    });
+    const data = await res.json();
+    clearInterval(mt);
+    document.getElementById('loading-section').style.display = 'none';
+    const raw = data.content.map(b => b.text||'').join('');
+    const plan = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    plan.genereret = new Date().toISOString();
+    localStorage.setItem('wp_madplan', JSON.stringify(plan));
+    localStorage.removeItem('wp_checked_1');
+    localStorage.removeItem('wp_checked_2');
+    showPlan(plan);
+  } catch(e) {
+    clearInterval(mt);
+    document.getElementById('loading-section').style.display = 'none';
+    document.getElementById('error-section').style.display = 'block';
+    document.getElementById('error-section').innerHTML = `<div class="error-box">Noget gik galt: ${e.message}. Din tidligere plan er ikke slettet.</div>`;
+    const saved = localStorage.getItem('wp_madplan');
+    if (saved) {
+      document.getElementById('output-section').style.display = 'block';
+      document.getElementById('new-plan-header-btn').style.display = 'block';
+    } else {
+      document.getElementById('form-section').style.display = 'block';
+    }
+  }
+}
+
+const badgeMap = {
+  hurtig: ['Hurtig hverdagsret','badge-hurtig'],
+  rugbrod: ['Rugbrødsaften','badge-rugbrod'],
+  batch: ['Batch-cooking','badge-batch'],
+  weekend: ['Weekendret','badge-weekend']
+};
+
+function renderAll(plan) {
+  renderMadplan(plan.uge1, 'tab-uge1');
+  renderMadplan(plan.uge2, 'tab-uge2');
+  renderIndkob(plan.indkob_uge1, plan.total_pris_uge1, 'tab-indkob1', '1');
+  renderIndkob(plan.indkob_uge2, plan.total_pris_uge2, 'tab-indkob2', '2');
+  renderOpskrifter(plan);
+}
+
+function renderMadplan(dage, tabId) {
+  let html = '';
+  dage.forEach(d => {
+    const [bl,bc] = badgeMap[d.type]||['','badge-hurtig'];
+    html += `<div class="day-card">
+      <div class="day-header"><span class="day-name">${d.dag}</span>${bl?`<span class="badge ${bc}">${bl}</span>`:''}</div>
+      <div class="meal-name">${d.ret}</div>
+      <div class="meal-meta">${d.beskrivelse} · ${d.tid} · Protein: ${d.protein_pr_voksen}/voksen</div>
+    </div>`;
+  });
+  document.getElementById(tabId).innerHTML = html;
+}
+
+function renderIndkob(indkob, total, tabId, ugeKey) {
+  const storeClass = {'Netto':'store-netto','Rema 1000':'store-rema','Lidl':'store-lidl'};
+  let checked = {};
+  try { checked = JSON.parse(localStorage.getItem(`wp_checked_${ugeKey}`) || '{}'); } catch(e) {}
+  const sorted = sortCategories(indkob);
+  let globalIdx = 0;
+  let html = `<div class="progress-bar"><div class="progress-fill" id="progress-fill-${ugeKey}" style="width:0%"></div></div>`;
+  html += `<div class="checked-count" id="checked-count-${ugeKey}">0 af 0 varer i kurven</div>`;
+  sorted.forEach(cat => {
+    if (!cat.varer || cat.varer.length === 0) return;
+    html += `<div class="shop-cat"><div class="shop-cat-title">${cat.kategori}</div>`;
+    cat.varer.forEach(v => {
+      const idx = globalIdx++;
+      const sc = storeClass[v.butik]||'';
+      const isChecked = checked[idx] || false;
+      html += `<div class="shop-item${isChecked?' checked':''}" data-uge="${ugeKey}" data-idx="${idx}" onclick="toggleItem('${ugeKey}',${idx})">
+        <div class="item-check"><span class="checkmark">✓</span></div>
+        <div class="item-info">
+          <div class="item-name">${v.navn}</div>
+          <div class="item-qty">${v.maengde}</div>
+        </div>
+        <div class="item-right">
+          ${v.butik !== 'Netto' ? `<span class="item-store ${sc}">${v.butik}</span>` : ''}
+          <span class="item-price">${Math.round(v.pris)} kr</span>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  html += `<div class="price-total">Estimeret total: ${Math.round(total)} kr</div>`;
+  document.getElementById(tabId).innerHTML = html;
+  updateProgress(ugeKey);
+}
+
+function renderOpskrifter(plan) {
+  let html = '';
+  if (plan.madspild_note) html += `<div class="info-box">${plan.madspild_note}</div>`;
+  plan.opskrifter.forEach(r => {
+    html += `<div class="recipe-block">
+      <div class="recipe-title">${r.ret}</div>
+      <div class="recipe-day">${r.dag}</div>
+      <span class="recipe-protein">${r.protein_note}</span>
+      <div class="recipe-ing">${r.ingredienser.join(', ')}</div>
+      <div class="recipe-desc">${r.fremgangsmaade}</div>
+    </div>`;
+  });
+  document.getElementById('tab-opskrifter').innerHTML = html;
+}
+
+// Init: check for saved plan on load
+function showApiKeySetup() {
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('output-section').style.display = 'none';
+  document.getElementById('new-plan-header-btn').style.display = 'none';
+  document.getElementById('apikey-section').style.display = 'block';
+}
+
+function saveApiKey() {
+  const key = document.getElementById('apikey-input').value.trim();
+  if (!key.startsWith('sk-ant-')) {
+    document.getElementById('apikey-error').textContent = 'Nøglen ser ikke rigtig ud — den skal starte med sk-ant-';
+    return;
+  }
+  localStorage.setItem('wp_api_key', key);
+  document.getElementById('apikey-section').style.display = 'none';
+  const saved = localStorage.getItem('wp_madplan');
+  if (saved) {
+    try { showPlan(JSON.parse(saved)); } catch(e) { showForm(); }
+  } else {
+    showForm();
+  }
+}
+
+function resetApiKey() {
+  closeModal();
+  localStorage.removeItem('wp_api_key');
+  showApiKeySetup();
+}
+
+(function init() {
+  try {
+    const key = localStorage.getItem('wp_api_key');
+    if (!key) { showApiKeySetup(); return; }
+    const saved = localStorage.getItem('wp_madplan');
+    if (saved) {
+      showPlan(JSON.parse(saved));
+    } else {
+      showForm();
+    }
+  } catch(e) {
+    showForm();
+  }
+})();
+</script>
+</body>
+</html>
