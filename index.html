@@ -208,15 +208,29 @@
 <div class="container">
   <div id="apikey-section" style="display:none">
     <div class="card">
-      <div class="sec-title">Opsætning</div>
-      <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Indtast din Anthropic API-nøgle for at komme i gang. Den gemmes på denne enhed og bruges til at generere madplaner.</p>
+      <div class="sec-title">Opsætning — trin 1 af 2</div>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Indtast din Anthropic API-nøgle. Den bruges til at generere madplaner og gemmes kun på denne enhed.</p>
       <div class="field">
-        <label>API-nøgle</label>
+        <label>Anthropic API-nøgle</label>
         <input type="text" id="apikey-input" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
         <p id="apikey-error" style="font-size:12px;color:var(--red);margin-top:6px;"></p>
       </div>
-      <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6;">Nøglen oprettes på <strong>platform.claude.com</strong> under API keys. Den deles med din kæreste så hun kan taste den ind på sin telefon.</p>
-      <button class="btn" onclick="saveApiKey()">Gem og fortsæt</button>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6;">Oprettes på <strong>platform.claude.com</strong> under API keys.</p>
+      <button class="btn" onclick="saveApiKey()">Næste</button>
+    </div>
+  </div>
+
+  <div id="github-section" style="display:none">
+    <div class="card">
+      <div class="sec-title">Opsætning — trin 2 af 2</div>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Indtast dit GitHub Personal Access Token så planen kan deles med din kæreste på tværs af enheder.</p>
+      <div class="field">
+        <label>GitHub Personal Access Token</label>
+        <input type="text" id="github-input" placeholder="ghp_..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+        <p id="github-error" style="font-size:12px;color:var(--red);margin-top:6px;"></p>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6;">Oprettes på <strong>github.com</strong> → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token. Giv den adgang til <strong>repo</strong>.</p>
+      <button class="btn" onclick="saveGithubToken()">Gem og kom i gang</button>
     </div>
   </div>
 
@@ -549,6 +563,7 @@ JSON:
     localStorage.setItem('wp_madplan', JSON.stringify(plan));
     localStorage.removeItem('wp_checked_1');
     localStorage.removeItem('wp_checked_2');
+    savePlanToGitHub(plan);
     showPlan(plan);
   } catch(e) {
     clearInterval(mt);
@@ -661,12 +676,93 @@ function toggleAcc(i) {
   arr.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
 }
 
-// Init: check for saved plan on load
+// GitHub config
+const GH_USER = 'Wraa-Petersen';
+const GH_REPO = 'madplan';
+const GH_FILE = 'plan.json';
+const GH_API  = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE}`;
+
+function getGhToken() { return localStorage.getItem('wp_gh_token') || ''; }
+function getApiKey()  { return localStorage.getItem('wp_api_key') || ''; }
+
+// --- GitHub sync ---
+async function savePlanToGitHub(plan) {
+  const token = getGhToken();
+  if (!token) return;
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(plan))));
+    let sha = '';
+    try {
+      const r = await fetch(GH_API, { headers: { 'Authorization': `token ${token}` } });
+      if (r.ok) { const d = await r.json(); sha = d.sha; }
+    } catch(e) {}
+    await fetch(GH_API, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Opdater madplan', content, ...(sha ? { sha } : {}) })
+    });
+  } catch(e) { console.warn('GitHub gem fejlede:', e); }
+}
+
+async function loadPlanFromGitHub() {
+  const token = getGhToken();
+  if (!token) return null;
+  try {
+    const r = await fetch(GH_API + '?t=' + Date.now(), {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    const json = decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
+    return JSON.parse(json);
+  } catch(e) { return null; }
+}
+
+async function saveCheckedToGitHub(key, checked) {
+  const token = getGhToken();
+  if (!token) return;
+  const chkFile = `checked_${key}.json`;
+  const chkApi = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${chkFile}`;
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(checked))));
+    let sha = '';
+    try {
+      const r = await fetch(chkApi, { headers: { 'Authorization': `token ${token}` } });
+      if (r.ok) { const d = await r.json(); sha = d.sha; }
+    } catch(e) {}
+    await fetch(chkApi, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Opdater indkøb', content, ...(sha ? { sha } : {}) })
+    });
+  } catch(e) {}
+}
+
+async function loadCheckedFromGitHub(key) {
+  const token = getGhToken();
+  if (!token) return null;
+  const chkFile = `checked_${key}.json`;
+  const chkApi = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${chkFile}`;
+  try {
+    const r = await fetch(chkApi + '?t=' + Date.now(), { headers: { 'Authorization': `token ${token}` } });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
+  } catch(e) { return null; }
+}
+
+// --- Setup screens ---
 function showApiKeySetup() {
   document.getElementById('form-section').style.display = 'none';
   document.getElementById('output-section').style.display = 'none';
+  document.getElementById('github-section').style.display = 'none';
   document.getElementById('new-plan-header-btn').style.display = 'none';
   document.getElementById('apikey-section').style.display = 'block';
+}
+
+function showGithubSetup() {
+  document.getElementById('apikey-section').style.display = 'none';
+  document.getElementById('github-section').style.display = 'block';
 }
 
 function saveApiKey() {
@@ -677,10 +773,31 @@ function saveApiKey() {
   }
   localStorage.setItem('wp_api_key', key);
   document.getElementById('apikey-section').style.display = 'none';
-  const saved = localStorage.getItem('wp_madplan');
-  if (saved) {
-    try { showPlan(JSON.parse(saved)); } catch(e) { showForm(); }
+  if (!getGhToken()) { showGithubSetup(); } else { afterSetup(); }
+}
+
+function saveGithubToken() {
+  const token = document.getElementById('github-input').value.trim();
+  if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+    document.getElementById('github-error').textContent = 'Nøglen ser ikke rigtig ud — den skal starte med ghp_ eller github_pat_';
+    return;
+  }
+  localStorage.setItem('wp_gh_token', token);
+  document.getElementById('github-section').style.display = 'none';
+  afterSetup();
+}
+
+async function afterSetup() {
+  document.getElementById('loading-section').style.display = 'block';
+  document.getElementById('loading-text').textContent = 'Henter seneste madplan...';
+  const plan = await loadPlanFromGitHub();
+  document.getElementById('loading-section').style.display = 'none';
+  if (plan) {
+    localStorage.setItem('wp_madplan', JSON.stringify(plan));
+    showPlan(plan);
   } else {
+    const local = localStorage.getItem('wp_madplan');
+    if (local) { try { showPlan(JSON.parse(local)); return; } catch(e) {} }
     showForm();
   }
 }
@@ -688,22 +805,59 @@ function saveApiKey() {
 function resetApiKey() {
   closeModal();
   localStorage.removeItem('wp_api_key');
+  localStorage.removeItem('wp_gh_token');
   showApiKeySetup();
 }
 
+// --- Override toggleItem to also sync to GitHub ---
+const _origToggle = toggleItem;
+function toggleItem(ugeKey, idx) {
+  const storKey = `wp_checked_${ugeKey}`;
+  let checked = {};
+  try { checked = JSON.parse(localStorage.getItem(storKey) || '{}'); } catch(e) {}
+  checked[idx] = !checked[idx];
+  localStorage.setItem(storKey, JSON.stringify(checked));
+  const item = document.querySelector(`[data-uge="${ugeKey}"][data-idx="${idx}"]`);
+  if (item) item.classList.toggle('checked', checked[idx]);
+  updateProgress(ugeKey);
+  saveCheckedToGitHub(ugeKey, checked);
+}
+
+// --- Override showPlan to load checked from GitHub ---
+const _origShowPlan = showPlan;
+async function showPlan(plan) {
+  _origShowPlan(plan);
+  const c1 = await loadCheckedFromGitHub('1');
+  const c2 = await loadCheckedFromGitHub('2');
+  if (c1) {
+    localStorage.setItem('wp_checked_1', JSON.stringify(c1));
+    Object.keys(c1).forEach(idx => {
+      if (c1[idx]) {
+        const el = document.querySelector(`[data-uge="1"][data-idx="${idx}"]`);
+        if (el) el.classList.add('checked');
+      }
+    });
+    updateProgress('1');
+  }
+  if (c2) {
+    localStorage.setItem('wp_checked_2', JSON.stringify(c2));
+    Object.keys(c2).forEach(idx => {
+      if (c2[idx]) {
+        const el = document.querySelector(`[data-uge="2"][data-idx="${idx}"]`);
+        if (el) el.classList.add('checked');
+      }
+    });
+    updateProgress('2');
+  }
+}
+
+// --- Init ---
 (function init() {
   try {
-    const key = localStorage.getItem('wp_api_key');
-    if (!key) { showApiKeySetup(); return; }
-    const saved = localStorage.getItem('wp_madplan');
-    if (saved) {
-      showPlan(JSON.parse(saved));
-    } else {
-      showForm();
-    }
-  } catch(e) {
-    showForm();
-  }
+    if (!getApiKey()) { showApiKeySetup(); return; }
+    if (!getGhToken()) { showGithubSetup(); return; }
+    afterSetup();
+  } catch(e) { showForm(); }
 })();
 </script>
 </body>
